@@ -2,9 +2,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/marcosduarte-dev/TaskChrono-Back/configs"
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/entity"
+	database "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Project"
+	"github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/webserver/handlers"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,4 +26,18 @@ func main() {
 		panic(err)
 	}
 	db.AutoMigrate(&entity.Project{})
+
+	projectDB := database.NewProject(db)
+	ProjectHandler := handlers.NewProjectHandler(projectDB)
+
+	r  := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+	r.Post("/projects/", ProjectHandler.CreateProject)
+	r.Get("/projects/", ProjectHandler.GetProjects)
+	r.Get("/projects/{id}", ProjectHandler.GetProject)
+	r.Put("/projects/{id}", ProjectHandler.UpdateProject)
+	r.Delete("/projects/{id}", ProjectHandler.DeleteProject)
+
+	http.ListenAndServe(":8000", r)
 }

@@ -1,17 +1,8 @@
 package entity
 
 import (
-	"errors"
-
 	"github.com/marcosduarte-dev/TaskChrono-Back/pkg/entity"
-)
-
-var (
-	ErrIDIsRequired = errors.New("id is required")
-	ErrInvalidID = errors.New("invalid id")
-	ErrNameIsRequired = errors.New("name is required")
-	ErrColorIsRequired = errors.New("color is required")
-	ErrDescriptionIsRequired = errors.New("color is required")
+	"github.com/marcosduarte-dev/TaskChrono-Back/pkg/errors"
 )
 
 type Project struct {
@@ -19,14 +10,16 @@ type Project struct {
 	Name  			string    		`json:"name"`
 	Color 			string    		`json:"color"`
 	Description string  			`json:"description"`
+	UserID      string 				`json:"user_id"`
 }
 
-func NewProject(name string, color string, description string) (*Project, error) {
+func NewProject(name string, color string, description string, userID string) (*Project, error) {
 	project := &Project{
 		ID: entity.NewID(),
 		Name: name,
 		Color: color,
 		Description: description,
+		UserID: userID,
 	}
 	err := project.Validate()
 	if err != nil {
@@ -37,19 +30,22 @@ func NewProject(name string, color string, description string) (*Project, error)
 
 func (p *Project) Validate() error {
 	if p.ID.String() == "" {
-		return ErrIDIsRequired
+		return errors.ErrIDIsRequired
 	}
 	if _, err := entity.ParseID(p.ID.String()); err != nil { 
-		return ErrInvalidID
+		return errors.ErrInvalidID
 	}
 	if p.Name == "" {
-		return ErrNameIsRequired
+		return errors.ErrNameIsRequired
 	}
 	if p.Color == "" {
-		return ErrColorIsRequired
+		return errors.ErrColorIsRequired
 	}
 	if p.Description == "" {
-		return ErrDescriptionIsRequired
+		return errors.ErrDescriptionIsRequired
+	}
+	if p.UserID == "" {
+		return errors.ErrUserIDIsRequired
 	}
 	return nil
 }
