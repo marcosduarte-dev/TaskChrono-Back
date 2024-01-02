@@ -11,6 +11,7 @@ import (
 	database "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Project"
 	pkgEntity "github.com/marcosduarte-dev/TaskChrono-Back/pkg/entity"
 	"github.com/marcosduarte-dev/TaskChrono-Back/pkg/errors"
+	cors "github.com/marcosduarte-dev/TaskChrono-Back/pkg/func"
 )
 
 type ProjectHandler struct {
@@ -22,6 +23,7 @@ func NewProjectHandler(db database.ProjectInterface) *ProjectHandler {
 }
 
 func (h *ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
 	var project dto.ProjectInputDTO
 	err := json.NewDecoder(r.Body).Decode(&project)
 	if err != nil {
@@ -56,6 +58,7 @@ func (h *ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
 	page := r.URL.Query().Get("page")
 	limit := r.URL.Query().Get("limit")
 
@@ -85,6 +88,7 @@ func (h *ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ProjectHandler) GetProject(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
 	if id == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -107,6 +111,7 @@ func (h *ProjectHandler) GetProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ProjectHandler) UpdateProject(w http.ResponseWriter, r *http.Request)  {
+	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
 	if id == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -156,6 +161,7 @@ func (h *ProjectHandler) UpdateProject(w http.ResponseWriter, r *http.Request)  
 }
 
 func (h *ProjectHandler) DeleteProject(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
 	if id == "" {
 		w.WriteHeader(http.StatusBadRequest)
