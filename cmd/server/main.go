@@ -34,6 +34,7 @@ func main() {
 	r.Use(middleware.Logger)
 
 	r.Post("/projects/", ProjectHandler.CreateProject)
+	r.Options("/projects/", ProjectHandler.Options)
 	r.Get("/projects/", ProjectHandler.GetProjects)
 	r.Get("/projects/{id}", ProjectHandler.GetProject)
 	r.Put("/projects/{id}", ProjectHandler.UpdateProject)

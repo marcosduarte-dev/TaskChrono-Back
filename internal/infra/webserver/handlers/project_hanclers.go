@@ -22,6 +22,11 @@ func NewProjectHandler(db database.ProjectInterface) *ProjectHandler {
 	return &ProjectHandler{db}
 }
 
+func (h *ProjectHandler) Options(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	var project dto.ProjectInputDTO
