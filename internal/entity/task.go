@@ -5,30 +5,31 @@ import (
 	"github.com/marcosduarte-dev/TaskChrono-Back/pkg/errors"
 )
 
-type Project struct {
+type Task struct {
 	ID    			entity.ID 		`gorm:"primaryKey" json:"id"`
 	Name  			string    		`json:"name"`
 	Color 			string    		`json:"color"`
-	Description string  			`json:"description"`
-	UserID      string 				`json:"user_id"`
+	Description string  			`json:"description"`	
+	ProjectID   string        `json:"project_id"`
+	Project     Project       `gorm:"foreignKey:ProjectID" json:"project"`
 }
 
-func NewProject(name string, color string, description string, userID string) (*Project, error) {
-	project := &Project{
+func NewTask(name string, color string, description string, projectID string) (*Task, error) {
+	task := &Task{
 		ID: entity.NewID(),
 		Name: name,
 		Color: color,
 		Description: description,
-		UserID: userID,
+		ProjectID: projectID,
 	}
-	err := project.Validate()
+	err := task.ValidateTask()
 	if err != nil {
 		return nil, err
 	}
-	return project, nil
+	return task, nil
 }
 
-func (p *Project) Validate() error {
+func (p *Task) ValidateTask() error {
 	if p.ID.String() == "" {
 		return errors.ErrIDIsRequired
 	}
@@ -43,9 +44,6 @@ func (p *Project) Validate() error {
 	}
 	if p.Description == "" {
 		return errors.ErrDescriptionIsRequired
-	}
-	if p.UserID == "" {
-		return errors.ErrUserIDIsRequired
 	}
 	return nil
 }
