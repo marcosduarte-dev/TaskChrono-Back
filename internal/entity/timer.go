@@ -65,7 +65,7 @@ func (p *Timer) ValidateTimer() error {
 	if p.RecordType == "" {
 		return errors.ErrRecordTypeIsRequired
 	}
-	if p.RecordType != "start" || p.RecordType != "stop" {
+	if p.RecordType != "start" && p.RecordType != "stop" {
 		return errors.ErrRecordTypeValidValues
 	}
 	return nil
