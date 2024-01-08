@@ -10,6 +10,7 @@ import (
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/entity"
 	dbProject "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Project"
 	dbTask "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Task"
+	dbTimer "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Timer"
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/webserver/handlers"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,7 +27,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&entity.Project{}, &entity.Task{})
+	db.AutoMigrate(&entity.Project{}, &entity.Task{}, &entity.Timer{})
 
 	projectDB := dbProject.NewProject(db)
 	ProjectHandler := handlers.NewProjectHandler(projectDB)
@@ -34,16 +35,11 @@ func main() {
 	taskDB := dbTask.NewTask(db)
 	TaskHandler := handlers.NewTaskHandler(taskDB)
 
+	timerDB := dbTimer.NewTimer(db)
+	TimerHandler := handlers.NewTimerHandler(timerDB)
+
 	r  := chi.NewRouter()
 	r.Use(middleware.Logger)
-
-	// r.Post("/projects/", ProjectHandler.CreateProject)
-	// r.Options("/projects/", ProjectHandler.Options)
-	// r.Get("/projects/", ProjectHandler.GetProjects)
-	// r.Get("/projects/{id}", ProjectHandler.GetProject)
-	// r.Put("/projects/{id}", ProjectHandler.UpdateProject)
-	// r.Delete("/projects/{id}", ProjectHandler.DeleteProject) 
-	// r.Options("/projects/{id}", ProjectHandler.Options) 
 
 	r.Route("/projects", func(r chi.Router) {
 		r.Post("/", ProjectHandler.CreateProject)
@@ -63,6 +59,16 @@ func main() {
 		r.Put("/{id}", TaskHandler.UpdateTask)
 		r.Delete("/{id}", TaskHandler.DeleteTask) 
 		r.Options("/{id}", TaskHandler.Options) 
+	})
+	r.Route("/timers", func(r chi.Router) {
+		r.Post("/", TimerHandler.CreateTimer)
+		r.Options("/", TimerHandler.Options)
+		r.Get("/", TimerHandler.GetTimers)
+		r.Get("/{id}", TimerHandler.GetTimer)
+		r.Get("/task/{task_id}", TimerHandler.GetTimerByTaskID)
+		r.Put("/{id}", TimerHandler.UpdateTimer)
+		r.Delete("/{id}", TimerHandler.DeleteTimer) 
+		r.Options("/{id}", TimerHandler.Options) 
 	})
 
 	http.ListenAndServe(":8000", r)
