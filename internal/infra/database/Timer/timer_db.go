@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/entity"
 	"gorm.io/gorm"
 )
@@ -43,6 +45,14 @@ func (p *Timer) FindByID(id string) (*entity.Timer, error) {
 	var timer entity.Timer
 	err := p.DB.Preload("Task").First(&timer, "id = ?", id).Error
 	return &timer, err
+}
+
+func (p *Timer) FindByDate(date time.Time) ([]*entity.Timer, error) {
+	var timer []*entity.Timer
+
+	err := p.DB.Where("DATE(start_time) = ? OR DATE(end_time) = ?", date.Format("2006-01-02"), date.Format("2006-01-02")).Preload("Task").Preload("Task.Project").Find(&timer).Error
+
+	return timer, err
 }
 
 func (p *Timer) Update(timer *entity.Timer) error {

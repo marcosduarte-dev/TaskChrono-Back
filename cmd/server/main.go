@@ -65,6 +65,7 @@ func main() {
 		r.Options("/", TimerHandler.Options)
 		r.Get("/", TimerHandler.GetTimers)
 		r.Get("/{id}", TimerHandler.GetTimer)
+		r.Get("/date/{date}", TimerHandler.GetTimerByDate)
 		r.Get("/task/{task_id}", TimerHandler.GetTimerByTaskID)
 		r.Put("/{id}", TimerHandler.UpdateTimer)
 		r.Delete("/{id}", TimerHandler.DeleteTimer) 

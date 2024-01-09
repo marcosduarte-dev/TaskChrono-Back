@@ -12,6 +12,8 @@ var (
 	ErrStartTimeMustBeNull         = errors.New("start time must be null")
 	ErrEndTimeIsRequired           = errors.New("end time is required")
 	ErrEndTimeMustBeNull           = errors.New("end time must be null")
+	ErrDateIsRequired              = errors.New("date is required")
+	ErrDateInvalidFormat           = errors.New("date invalid format")
 	ErrTotalDuration               = errors.New("total duration must be greater than 0")
 	ErrTotalDurationStart          = errors.New("total duration on start must be 0")
 )

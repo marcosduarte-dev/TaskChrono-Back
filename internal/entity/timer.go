@@ -8,11 +8,11 @@ import (
 )
 
 type Timer struct {
-	ID    			   entity.ID 		`gorm:"primaryKey" json:"id"`
-	StartTime      time.Time
-  EndTime        time.Time
-  TotalDuration  int
-  RecordType     string
+	ID    			   entity.ID 		 `gorm:"primaryKey" json:"id"`
+	StartTime      time.Time     `json:"start_time"`
+  EndTime        time.Time     `json:"end_time"`
+  TotalDuration  int           `json:"total_duration"`
+  RecordType     string        `json:"record_type"`
 	TaskID         string        `json:"task_id"`
 	Task           Task          `gorm:"foreignKey:TaskID" json:"task"`
 }

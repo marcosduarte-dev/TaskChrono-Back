@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi"
 	dto "github.com/marcosduarte-dev/TaskChrono-Back/internal/dto/Timer"
@@ -126,6 +127,36 @@ func (h *TimerHandler) GetTimerByTaskID(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	timer, err := h.TimerDB.FindByTaskID(taskID)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json")
+		error := pkgEntity.Return{Status: "Error", Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(timer)
+}
+
+func (h *TimerHandler) GetTimerByDate(w http.ResponseWriter, r *http.Request) {
+	cors.EnableCors(&w)
+	dateStr := chi.URLParam(r, "date")
+	if dateStr == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		error := pkgEntity.Return{Status: "Error", Message: errors.ErrDateIsRequired.Error()}
+		json.NewEncoder(w).Encode(error)
+		return
+	}
+	date, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		error := pkgEntity.Return{Status: "Error", Message: errors.ErrDateInvalidFormat.Error()}
+		json.NewEncoder(w).Encode(error)
+	}
+	timer, err := h.TimerDB.FindByDate(date)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		w.Header().Set("Content-Type", "application/json")
