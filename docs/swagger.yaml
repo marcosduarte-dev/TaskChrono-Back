@@ -1,0 +1,65 @@
+basePath: /
+definitions:
+  dto.ProjectInputDTO:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  entity.Return:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: pe.marcos30@gmail.com
+    name: Marcos Duarte
+    url: http://github.com/marcosduarte-dev/
+  description: BackEnd to timer project
+  license:
+    name: MarkDev License
+    url: http://github.com/marcosduarte-dev/
+  termsOfService: http://www.swagger.io/terms/
+  title: Go Task Chrono API
+  version: "1.0"
+paths:
+  /projects:
+    post:
+      consumes:
+      - application/json
+      description: Create projectss
+      parameters:
+      - description: project request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProjectInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Create project
+      tags:
+      - projects
+swagger: "2.0"

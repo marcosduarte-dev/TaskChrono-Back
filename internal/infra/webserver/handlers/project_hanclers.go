@@ -17,7 +17,6 @@ import (
 type ProjectHandler struct {
 	ProjectDB database.ProjectInterface
 }
-
 func NewProjectHandler(db database.ProjectInterface) *ProjectHandler {
 	return &ProjectHandler{db}
 }
@@ -27,6 +26,17 @@ func (h *ProjectHandler) Options(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Create       Project   godoc
+// @Summary     Create project
+// @Description Create projectss
+// @Tags        projects
+// @Accept      json
+// @Produce     json
+// @Param       request   body     dto.ProjectInputDTO true "project request"
+// @Success     201       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Failure     400       {object} entity.Return
+// @Router      /projects [post]
 func (h *ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	var project dto.ProjectInputDTO

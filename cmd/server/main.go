@@ -7,15 +7,31 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/marcosduarte-dev/TaskChrono-Back/configs"
+	_ "github.com/marcosduarte-dev/TaskChrono-Back/docs"
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/entity"
 	dbProject "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Project"
 	dbTask "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Task"
 	dbTimer "github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/database/Timer"
 	"github.com/marcosduarte-dev/TaskChrono-Back/internal/infra/webserver/handlers"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
+// @title Go Task Chrono API
+// @version 1.0
+// @description BackEnd to timer project
+// @termsOfService http://www.swagger.io/terms/
+
+// @contact.name Marcos Duarte
+// @contact.url http://github.com/marcosduarte-dev/
+// @contact.email pe.marcos30@gmail.com
+
+// @license.name MarkDev License
+// @license.url http://github.com/marcosduarte-dev/
+
+// @host localhost:8000
+// @BasePath /
 func main() {
 	cfg, err := configs.LoadConfig(".")
 	if err != nil {
@@ -71,6 +87,9 @@ func main() {
 		r.Delete("/{id}", TimerHandler.DeleteTimer) 
 		r.Options("/{id}", TimerHandler.Options) 
 	})
+
+	
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	http.ListenAndServe(":8000", r)
 }
