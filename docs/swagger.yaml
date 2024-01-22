@@ -11,6 +11,19 @@ definitions:
       user_id:
         type: string
     type: object
+  entity.Project:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: string
+    type: object
   entity.Return:
     properties:
       message:
@@ -33,10 +46,43 @@ info:
   version: "1.0"
 paths:
   /projects:
+    get:
+      consumes:
+      - application/json
+      description: get all projects
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Project'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: List projects
+      tags:
+      - projects
     post:
       consumes:
       - application/json
-      description: Create projectss
+      description: Create projects
       parameters:
       - description: project request
         in: body
@@ -60,6 +106,108 @@ paths:
           schema:
             $ref: '#/definitions/entity.Return'
       summary: Create project
+      tags:
+      - projects
+  /projects/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a project by ID
+      parameters:
+      - description: project ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Delete a project
+      tags:
+      - projects
+    get:
+      consumes:
+      - application/json
+      description: Get a product by id
+      parameters:
+      - description: project ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Project'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get a project
+      tags:
+      - projects
+    put:
+      consumes:
+      - application/json
+      description: Update a project by ID
+      parameters:
+      - description: project ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: project request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProjectInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Update a project
       tags:
       - projects
 swagger: "2.0"

@@ -28,7 +28,7 @@ func (h *ProjectHandler) Options(w http.ResponseWriter, r *http.Request) {
 
 // Create       Project   godoc
 // @Summary     Create project
-// @Description Create projectss
+// @Description Create projects
 // @Tags        projects
 // @Accept      json
 // @Produce     json
@@ -72,6 +72,18 @@ func (h *ProjectHandler) CreateProject(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ret)
 }
 
+// ListProjects godoc
+// @Summary     List projects
+// @Description get all projects
+// @Tags        projects
+// @Accept      json
+// @Produce     json
+// @Param       page      query    string         false "page number"
+// @Param       limit     query    string         false "limit"
+// @Success     200       {array}  entity.Project
+// @Failure     404       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Router      /projects [get]
 func (h *ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	page := r.URL.Query().Get("page")
@@ -102,6 +114,17 @@ func (h *ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(projects)
 }
 
+// GetProject godoc
+// @Summary     Get a project 
+// @Description Get a product by id
+// @Tags        projects
+// @Accept      json
+// @Produce     json
+// @Param 			id 						 path 		string 				 true "project ID" Format(uuid)
+// @Success 		200 					 {object} entity.Project
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router      /projects/{id} [get]
 func (h *ProjectHandler) GetProject(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -125,6 +148,19 @@ func (h *ProjectHandler) GetProject(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(project)
 }
 
+// Update Project godoc
+// @Summary 		Update a project
+// @Description Update a project by ID
+// @Tags 				projects
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "project ID" Format(uuid)
+// @Param 			request 			 body 		dto.ProjectInputDTO true "project request"
+// @Success 		200						 {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/projects/{id} [put]
 func (h *ProjectHandler) UpdateProject(w http.ResponseWriter, r *http.Request)  {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -175,6 +211,18 @@ func (h *ProjectHandler) UpdateProject(w http.ResponseWriter, r *http.Request)  
 	json.NewEncoder(w).Encode(ret)
 }
 
+// Delete Project godoc
+// @Summary 		Delete a project
+// @Description Delete a project by ID
+// @Tags 				projects
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "project ID" Format(uuid)
+// @Success 		200					   {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/projects/{id} [delete]
 func (h *ProjectHandler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
