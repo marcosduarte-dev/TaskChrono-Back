@@ -116,7 +116,7 @@ func (h *ProjectHandler) GetProjects(w http.ResponseWriter, r *http.Request) {
 
 // GetProject godoc
 // @Summary     Get a project 
-// @Description Get a product by id
+// @Description Get a project by id
 // @Tags        projects
 // @Accept      json
 // @Produce     json

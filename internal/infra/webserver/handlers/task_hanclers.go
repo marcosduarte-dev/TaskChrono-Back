@@ -27,6 +27,17 @@ func (h *TaskHandler) Options(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Create       Task   godoc
+// @Summary     Create task
+// @Description Create tasks
+// @Tags        tasks
+// @Accept      json
+// @Produce     json
+// @Param       request   body     dto.TaskInputDTO true "task request"
+// @Success     201       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Failure     400       {object} entity.Return
+// @Router      /tasks [post]
 func (h *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	var task dto.TaskInputDTO
@@ -62,6 +73,18 @@ func (h *TaskHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ret)
 }
 
+// ListTasks godoc
+// @Summary     List tasks
+// @Description get all tasks
+// @Tags        tasks
+// @Accept      json
+// @Produce     json
+// @Param       page      query    string         false "page number"
+// @Param       limit     query    string         false "limit"
+// @Success     200       {array}  entity.Task
+// @Failure     404       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Router      /tasks [get]
 func (h *TaskHandler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	page := r.URL.Query().Get("page")
@@ -92,6 +115,17 @@ func (h *TaskHandler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tasks)
 }
 
+// GetTask godoc
+// @Summary     Get a task 
+// @Description Get a task by id
+// @Tags        tasks
+// @Accept      json
+// @Produce     json
+// @Param 			id 						 path 		string 				 true "task ID" Format(uuid)
+// @Success 		200 					 {object} entity.Task
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router      /tasks/{id} [get]
 func (h *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -115,6 +149,17 @@ func (h *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(task)
 }
 
+// GetTaskByProjectID godoc
+// @Summary 		Get taks by project ID
+// @Description Get taks by project ID
+// @Tags 				tasks
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "Project ID" Format(uuid)
+// @Success 		200						 {array}  entity.Task
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router 			/tasks/project/{id} [get]
 func (h *TaskHandler) GetTaskByProjectID(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	projectID := chi.URLParam(r, "project_id")
@@ -138,6 +183,19 @@ func (h *TaskHandler) GetTaskByProjectID(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(task)
 }
 
+// Update Task godoc
+// @Summary 		Update a task
+// @Description Update a task by ID
+// @Tags 				tasks
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "task ID" Format(uuid)
+// @Param 			request 			 body 		dto.TaskInputDTO true "task request"
+// @Success 		200						 {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/tasks/{id} [put]
 func (h *TaskHandler) UpdateTask(w http.ResponseWriter, r *http.Request)  {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -188,6 +246,18 @@ func (h *TaskHandler) UpdateTask(w http.ResponseWriter, r *http.Request)  {
 	json.NewEncoder(w).Encode(ret)
 }
 
+// Delete Task godoc
+// @Summary 		Delete a task
+// @Description Delete a task by ID
+// @Tags 				tasks
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "task ID" Format(uuid)
+// @Success 		200					   {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/tasks/{id} [delete]
 func (h *TaskHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")

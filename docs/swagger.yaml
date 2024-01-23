@@ -11,6 +11,17 @@ definitions:
       user_id:
         type: string
     type: object
+  dto.TaskInputDTO:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      project_id:
+        type: string
+    type: object
   entity.Project:
     properties:
       color:
@@ -29,6 +40,21 @@ definitions:
       message:
         type: string
       status:
+        type: string
+    type: object
+  entity.Task:
+    properties:
+      color:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      project:
+        $ref: '#/definitions/entity.Project'
+      project_id:
         type: string
     type: object
 host: localhost:8000
@@ -145,7 +171,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a product by id
+      description: Get a project by id
       parameters:
       - description: project ID
         format: uuid
@@ -210,4 +236,201 @@ paths:
       summary: Update a project
       tags:
       - projects
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: get all tasks
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Task'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: List tasks
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Create tasks
+      parameters:
+      - description: task request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Create task
+      tags:
+      - tasks
+  /tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a task by ID
+      parameters:
+      - description: task ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Delete a task
+      tags:
+      - tasks
+    get:
+      consumes:
+      - application/json
+      description: Get a task by id
+      parameters:
+      - description: task ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get a task
+      tags:
+      - tasks
+    put:
+      consumes:
+      - application/json
+      description: Update a task by ID
+      parameters:
+      - description: task ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: task request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Update a task
+      tags:
+      - tasks
+  /tasks/project/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get taks by project ID
+      parameters:
+      - description: Project ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get taks by project ID
+      tags:
+      - tasks
 swagger: "2.0"
