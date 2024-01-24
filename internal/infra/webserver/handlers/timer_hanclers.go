@@ -28,6 +28,17 @@ func (h *TimerHandler) Options(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Create       Timer   godoc
+// @Summary     Create timer
+// @Description Create timers
+// @Tags        timers
+// @Accept      json
+// @Produce     json
+// @Param       request   body     dto.TimerInputDTO true "timer request"
+// @Success     201       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Failure     400       {object} entity.Return
+// @Router      /timers [post]
 func (h *TimerHandler) CreateTimer(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	var timer dto.TimerInputDTO
@@ -63,6 +74,18 @@ func (h *TimerHandler) CreateTimer(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ret)
 }
 
+// ListTimers godoc
+// @Summary     List timers
+// @Description get all timers
+// @Tags        timers
+// @Accept      json
+// @Produce     json
+// @Param       page      query    string         false "page number"
+// @Param       limit     query    string         false "limit"
+// @Success     200       {array}  entity.Timer
+// @Failure     404       {object} entity.Return
+// @Failure     500       {object} entity.Return
+// @Router      /timers [get]
 func (h *TimerHandler) GetTimers(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	page := r.URL.Query().Get("page")
@@ -93,6 +116,17 @@ func (h *TimerHandler) GetTimers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(timers)
 }
 
+// GetTimer godoc
+// @Summary     Get a timer 
+// @Description Get a timer by id
+// @Tags        timers
+// @Accept      json
+// @Produce     json
+// @Param 			id 						 path 		string 				 true "timer ID" Format(uuid)
+// @Success 		200 					 {object} entity.Timer
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router      /timers/{id} [get]
 func (h *TimerHandler) GetTimer(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -116,6 +150,17 @@ func (h *TimerHandler) GetTimer(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(timer)
 }
 
+// GetTimerByTaskID godoc
+// @Summary 		Get timer by task ID
+// @Description Get timer by task ID
+// @Tags 				timers
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "Task ID" Format(uuid)
+// @Success 		200						 {array}  entity.Timer
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router 			/timers/task/{id} [get]
 func (h *TimerHandler) GetTimerByTaskID(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	taskID := chi.URLParam(r, "task_id")
@@ -139,6 +184,17 @@ func (h *TimerHandler) GetTimerByTaskID(w http.ResponseWriter, r *http.Request) 
 	json.NewEncoder(w).Encode(timer)
 }
 
+// GetTimerByDate godoc
+// @Summary 		Get timer by date
+// @Description Get timer by date
+// @Tags 				timers
+// @Accept 			json
+// @Produce 		json
+// @Param 			date 					 path 		string        true "Date"
+// @Success 		200						 {array}  entity.Timer
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Router 			/timers/date/{date} [get]
 func (h *TimerHandler) GetTimerByDate(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	dateStr := chi.URLParam(r, "date")
@@ -169,6 +225,19 @@ func (h *TimerHandler) GetTimerByDate(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(timer)
 }
 
+// Update Timer godoc
+// @Summary 		Update a timer
+// @Description Update a timer by ID
+// @Tags 				timers
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 					  true "timer ID" Format(uuid)
+// @Param 			request 			 body 		dto.TimerInputDTO true "timer request"
+// @Success 		200						 {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/timers/{id} [put]
 func (h *TimerHandler) UpdateTimer(w http.ResponseWriter, r *http.Request)  {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")
@@ -219,6 +288,18 @@ func (h *TimerHandler) UpdateTimer(w http.ResponseWriter, r *http.Request)  {
 	json.NewEncoder(w).Encode(ret)
 }
 
+// Delete Timer godoc
+// @Summary 		Delete a timer
+// @Description Delete a timer by ID
+// @Tags 				timers
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 						 path 		string 								 true "timer ID" Format(uuid)
+// @Success 		200					   {object} entity.Return
+// @Failure 		400 					 {object} entity.Return
+// @Failure 		404 					 {object} entity.Return
+// @Failure 		500 					 {object} entity.Return
+// @Router 			/timers/{id} [delete]
 func (h *TimerHandler) DeleteTimer(w http.ResponseWriter, r *http.Request) {
 	cors.EnableCors(&w)
 	id := chi.URLParam(r, "id")

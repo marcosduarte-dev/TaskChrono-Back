@@ -22,6 +22,19 @@ definitions:
       project_id:
         type: string
     type: object
+  dto.TimerInputDTO:
+    properties:
+      end_time:
+        type: string
+      record_type:
+        type: string
+      start_time:
+        type: string
+      task_id:
+        type: string
+      total_duration:
+        type: integer
+    type: object
   entity.Project:
     properties:
       color:
@@ -56,6 +69,23 @@ definitions:
         $ref: '#/definitions/entity.Project'
       project_id:
         type: string
+    type: object
+  entity.Timer:
+    properties:
+      end_time:
+        type: string
+      id:
+        type: string
+      record_type:
+        type: string
+      start_time:
+        type: string
+      task:
+        $ref: '#/definitions/entity.Task'
+      task_id:
+        type: string
+      total_duration:
+        type: integer
     type: object
 host: localhost:8000
 info:
@@ -405,7 +435,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get taks by project ID
+      description: Get tasks by project ID
       parameters:
       - description: Project ID
         format: uuid
@@ -430,7 +460,235 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/entity.Return'
-      summary: Get taks by project ID
+      summary: Get tasks by project ID
       tags:
       - tasks
+  /timers:
+    get:
+      consumes:
+      - application/json
+      description: get all timers
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Timer'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: List timers
+      tags:
+      - timers
+    post:
+      consumes:
+      - application/json
+      description: Create timers
+      parameters:
+      - description: timer request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TimerInputDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Create timer
+      tags:
+      - timers
+  /timers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a timer by ID
+      parameters:
+      - description: timer ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Delete a timer
+      tags:
+      - timers
+    get:
+      consumes:
+      - application/json
+      description: Get a timer by id
+      parameters:
+      - description: timer ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Timer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get a timer
+      tags:
+      - timers
+    put:
+      consumes:
+      - application/json
+      description: Update a timer by ID
+      parameters:
+      - description: timer ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: timer request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TimerInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Update a timer
+      tags:
+      - timers
+  /timers/date/{date}:
+    get:
+      consumes:
+      - application/json
+      description: Get timer by date
+      parameters:
+      - description: Date
+        in: path
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Timer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get timer by date
+      tags:
+      - timers
+  /timers/task/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get timer by task ID
+      parameters:
+      - description: Task ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Timer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Return'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Return'
+      summary: Get timer by task ID
+      tags:
+      - timers
 swagger: "2.0"

@@ -150,8 +150,8 @@ func (h *TaskHandler) GetTask(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetTaskByProjectID godoc
-// @Summary 		Get taks by project ID
-// @Description Get taks by project ID
+// @Summary 		Get tasks by project ID
+// @Description Get tasks by project ID
 // @Tags 				tasks
 // @Accept 			json
 // @Produce 		json
