@@ -33,40 +33,44 @@ func NewTimer(startTime time.Time, endTime time.Time, TotalDuration int, RecordT
 	return timer, nil
 }
 
-func (p *Timer) ValidateTimer() error {
-	print(p.StartTime.String())
-	if p.ID.String() == "" {
+func (t *Timer) ValidateTimer() error {
+	if t.ID.String() == "" {
 		return errors.ErrIDIsRequired
 	}
-	if _, err := entity.ParseID(p.ID.String()); err != nil { 
+	
+	_, err := entity.ParseID(t.ID.String())
+	if err != nil {
 		return errors.ErrInvalidID
 	}
-	if p.RecordType == "start" {
-		if p.TotalDuration > 0 {
+
+	switch t.RecordType {
+	case "start":
+		if t.TotalDuration > 0 {
 			return errors.ErrTotalDurationStart
 		}
-		if p.StartTime.IsZero() {
+		if t.StartTime.IsZero() {
 			return errors.ErrStartTimeIsRequired
 		}
-		if !p.EndTime.IsZero() {
+		if !t.EndTime.IsZero() {
 			return errors.ErrEndTimeMustBeNull
 		}
-	} else {
-		if p.TotalDuration <= 0 {
+	case "stop":
+		if t.TotalDuration <= 0 {
 			return errors.ErrTotalDuration
 		}
-		if !p.StartTime.IsZero() {
+		if !t.StartTime.IsZero() {
 			return errors.ErrStartTimeMustBeNull
 		}
-		if p.EndTime.IsZero() {
+		if t.EndTime.IsZero() {
 			return errors.ErrEndTimeIsRequired
 		}
-	}
-	if p.RecordType == "" {
-		return errors.ErrRecordTypeIsRequired
-	}
-	if p.RecordType != "start" && p.RecordType != "stop" {
+	default:
 		return errors.ErrRecordTypeValidValues
 	}
+
+	if t.RecordType == "" {
+		return errors.ErrRecordTypeIsRequired
+	}
+
 	return nil
 }
